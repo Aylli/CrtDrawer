@@ -1,8 +1,11 @@
 ﻿program draw;
 uses Crt;
 var x, y, color: integer; // Координаты, цвет пикселя, фона
-    i, debug: integer; // Инкемент, дебаг
-procedure setbackground(color: integer);
+    i, j, debug: integer; // Инкемент, дебаг
+    picture: array[1..80, 1..25] of integer; // Картинка
+    
+// Функции
+procedure SetBackground(color: integer); // Установка фона
 var i, j: integer;
 begin
     textbackground(color); // Задаём цвет фона
@@ -12,7 +15,24 @@ begin
             write(' ');
         end;
 end;
+procedure DrawPicture(); // Отрисовка картинки
+var i, j: integer;
 begin
+    for i:=1 to 80 do
+        for j:=1 to 25 do begin
+            if picture[i][j]<>16 then begin
+                gotoxy(i, j);
+                textcolor(picture[i][j]);
+                write('█');
+            end;
+        end;
+end;
+begin
+    // Обнуляем переменные
+    for i:=1 to 80 do
+        for j:=1 to 25 do begin
+            picture[i][j]:=16;
+        end;
     x:=1;
     y:=1;
     textbackground(15); // Делаем белый фон
@@ -45,8 +65,7 @@ begin
             gotoxy(80, i); // Нижняя рамка
             write('█');
         end;
-        
-        
+        // Алгоритм программы
         gotoxy(1, 25); // Перемещаемся вниз экрана
         textbackground(0);
         textcolor(15);
@@ -56,13 +75,12 @@ begin
             write('Ошибка! Выберите другие координаты!')
         else begin
             if x>=100 then begin // Если x>=100 меняем фон
-               setbackground(color);
+               SetBackground(color);
             end;
             if x<100 then begin // Если x<100 рисуем в указанной точке
-                gotoxy(x+1, y+1);
-                textcolor(color);
-                write('█');
+                picture[x+1][y+1]:=color;
             end;
         end;
+        DrawPicture();
     end;
 end.
